@@ -50,7 +50,8 @@ class PrelimData(Data):
                     graph.add_nodes(i)
                 graph.add_edges(u, v)
                 # graph_dict[etype] = dgl.DGLGraph((u, v), num_nodes=num_nodes)
-                graph_dict[etype].ndata["feat"] = feat
+                graph.ndata["feat"] = feat
+                graph_dict[etype] = graph
         return graph_dict
 
     def read_pickle(self, path: str):
