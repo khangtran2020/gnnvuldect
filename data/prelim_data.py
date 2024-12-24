@@ -45,6 +45,8 @@ class PrelimData(Data):
         for etype in self.type_of_graph:
             if os.path.exists(os.path.join(path, f"{etype}.pkl")):
                 u, v = self._read_edge_list(path=path, etype=etype)
+                # Check unique nodes in u and v
+                assert len(set(u.tolist() + v.tolist())) <= num_nodes
                 graph = dgl.DGLGraph()
                 for i in range(num_nodes):
                     graph.add_nodes(i)
