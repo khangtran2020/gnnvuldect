@@ -41,10 +41,15 @@ class PrelimData(Data):
         graph_dict = {}
         num_nodes = self._get_num_nodes_from_raw(path=path)
         feat = self._read_node_features(path=path)
+        assert num_nodes == feat.shape[0]
         for etype in self.type_of_graph:
             if os.path.exists(os.path.join(path, f"{etype}.pkl")):
                 u, v = self._read_edge_list(path=path, etype=etype)
-                graph_dict[etype] = dgl.DGLGraph((u, v), num_nodes=num_nodes)
+                graph = dgl.DGLGraph()
+                for i in range(num_nodes):
+                    graph.add_nodes(i)
+                graph.add_edges(u, v)
+                # graph_dict[etype] = dgl.DGLGraph((u, v), num_nodes=num_nodes)
                 graph_dict[etype].ndata["feat"] = feat
         return graph_dict
 
