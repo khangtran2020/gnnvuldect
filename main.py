@@ -6,6 +6,7 @@ from utils.console import console
 def run(args):
 
     # Load Data
+    console.log("Loading dataset: ", args.dataset)
     dataset = get_data(args.dataset)
     console.log("Dataset loaded, size: ", len(dataset))
 
