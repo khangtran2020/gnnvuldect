@@ -56,7 +56,7 @@ def run(args):
                 mask_bin = mask_bin.view(-1, 1)
                 pred = model(data, mask_bin)
                 console.log("Prediction: ", pred)
-                loss = loss_fn(pred, torch.Tensor([Y[i]]).long())
+                loss = loss_fn(pred, torch.Tensor([Y[i]]).float())
                 console.log("Loss: ", loss)
                 break
             break
