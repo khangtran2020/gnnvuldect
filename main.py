@@ -57,11 +57,10 @@ def run(args):
                     dataset.num_nodes,
                     data["feat_size"],
                 )
-                console.log(
-                    f"Num nodes from raw: {dataset._get_num_nodes_from_raw(
-                        path=os.path.join('./Dataset', data['name'])
-                    )}"
+                num_node_raw = dataset._get_num_nodes_from_raw(
+                    path=os.path.join("./Dataset", data["name"])
                 )
+                console.log(f"Num nodes from raw: {num_node_raw}")
                 # mask_bin = torch.zeros(dataset.num_nodes)
                 # mask_bin[mask] = 1
                 # pred = model(data, mask_bin)
