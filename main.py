@@ -58,7 +58,10 @@ def run(args, device):
                 data, mask = X[i]
                 mask_bin = torch.zeros(data["num_nodes"])
                 mask_bin[mask] = 1
-                mask_bin = mask_bin.view(-1, 1)
+                mask_bin = mask_bin.view(-1, 1).to(device)
+                for key in dataset.type_of_graph:
+                    if key in data.keys():
+                        data[key] = data[key].to(device)
                 pred = model(data, mask_bin)
                 console.log("Prediction: ", pred)
                 loss = loss_fn(pred, torch.Tensor([Y[i]]).float())
