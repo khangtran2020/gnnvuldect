@@ -50,7 +50,9 @@ def run(args):
             X, Y = batch
             for i in range(len(X)):
                 data, mask = X[i]
-                pred = model(data, mask)
+                mask_bin = torch.zeros(dataset.num_nodes)
+                mask_bin[mask] = 1
+                pred = model(data, mask_bin)
                 console.log("Prediction: ", pred)
                 loss = loss_fn(pred, Y[i])
                 console.log("Loss: ", loss)
