@@ -56,6 +56,14 @@ class PrelimData(Data):
         with open(path, "rb") as f:
             return pickle.load(f)
 
+    def read_all_graphs(self) -> None:
+        all_graphs = {}
+        graph_id = self.df["graph"].unique()
+        for idx, graph in enumerate(graph_id):
+            graph_dict = self.read_graphs(path=os.path.join("Dataset", graph))
+            all_graphs[idx] = graph_dict
+        self.all_graphs = all_graphs
+
     def _read_edge_list(self, path: str, etype: str):
         edge_path = os.path.join(path, f"{etype}.pkl")
         edge_list = self.read_pickle(path=edge_path)

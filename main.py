@@ -1,5 +1,5 @@
 from config import parse_args
-from data.utils import get_data
+from data.utils import get_data, custom_collate
 from utils.console import console
 from torch.utils.data import DataLoader
 
@@ -9,11 +9,14 @@ def run(args):
     # Load Data
     console.log("Loading dataset: ", args.dataset)
     dataset = get_data(args.dataset)
+    dataset.read_all_graphs()
     console.log("Dataset loaded, size: ", len(dataset))
     console.log("Taking a look at the first element: ", dataset[0])
 
     # Data Loader
-    loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
+    loader = DataLoader(
+        dataset, batch_size=args.batch_size, shuffle=True, collate_fn=custom_collate
+    )
     console.log("Data Loader created")
     # Get the first batch
     for batch in loader:
