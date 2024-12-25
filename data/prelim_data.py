@@ -44,11 +44,12 @@ class PrelimData(Data):
     def read_graphs(self, path: str) -> dict:
         graph_dict = {}
         num_nodes = self._get_num_nodes_from_raw(path=path)
-        print(path, num_nodes)
+        # print(path, num_nodes)
         self.num_nodes = num_nodes
         feat = self._read_node_features(path=path)
         self.in_dim = feat.size(dim=1)
         self.feat_size = feat.size()
+        print(path, num_nodes, feat.size())
         assert num_nodes == feat.shape[0]
         for etype in self.type_of_graph:
             if os.path.exists(os.path.join(path, f"{etype}.pkl")):
