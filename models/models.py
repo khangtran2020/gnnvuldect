@@ -253,7 +253,7 @@ class GAT(nn.Module):
             h = self.layers[i](g, h)
             h = self.activation(h)
             h = h.flatten(1)
-        print(h.size())
+        print("Size of h after hidden layers:", h.size())
         h = h.mean(1)
         h = h * mask
         h = h.mean(0)
