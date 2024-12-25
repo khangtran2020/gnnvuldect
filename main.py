@@ -44,7 +44,7 @@ def run(args, device):
 
     model = model.to(device)
     loss_fn = loss_fn.to(device)
-    optimizer = optimizer.to(device)
+    # optimizer = optimizer.to(device)
 
     if args.debug:
         console.log("Model initialized, model: ", model)
