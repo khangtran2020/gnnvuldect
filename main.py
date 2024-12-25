@@ -2,6 +2,7 @@ from config import parse_args
 from data.utils import get_data, custom_collate
 from utils.console import console
 from torch.utils.data import DataLoader
+from models.models import MultiGAT
 
 
 def run(args):
@@ -23,6 +24,17 @@ def run(args):
         console.log("Batch size: ", len(batch))
         console.log("Batch: ", batch)
         break
+
+    # Initialize Model
+    model = MultiGAT(
+        in_feats=dataset.in_dim,
+        n_hidden=args.hid_dim,
+        n_classes=1,
+        n_layers=args.n_layers,
+        num_head=args.num_head,
+        dropout=args.dropout,
+    )
+    console.log("Model initialized, model: ", model)
 
 
 if __name__ == "__main__":
