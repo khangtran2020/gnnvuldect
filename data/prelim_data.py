@@ -34,7 +34,7 @@ class PrelimData(Data):
         mask = torch.Tensor(eval(mask)).long()
         label = self.df.iloc[idx]["label"]
         graph_dict = self.all_graphs[graph_name]
-        graph_name["name"] = graph_name
+        graph_dict["name"] = graph_name
         return graph_dict, mask, label
 
     def __len__(self):
