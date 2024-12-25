@@ -53,6 +53,7 @@ def run(args):
                 data, mask = X[i]
                 mask_bin = torch.zeros(data["num_nodes"])
                 mask_bin[mask] = 1
+                mask_bin = mask_bin.view(-1, 1)
                 pred = model(data, mask_bin)
                 console.log("Prediction: ", pred)
                 loss = loss_fn(pred, Y[i])
