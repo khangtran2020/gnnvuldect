@@ -50,7 +50,7 @@ def run(args):
             X, Y = batch
             for i in range(len(X)):
                 data, mask = X[i]
-                console.log("Data, graph_name: ", data["graph_name"])
+                console.log("Data, graph_name: ", data.keys())
                 mask_bin = torch.zeros(dataset.num_nodes)
                 mask_bin[mask] = 1
                 pred = model(data, mask_bin)
