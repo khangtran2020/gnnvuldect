@@ -64,16 +64,16 @@ class PrelimData(Data):
     def _read_node_features(self, path: str):
         df = pd.read_csv(os.path.join(path, "node_feat.csv"))
         df = df.drop(["id", "CODE"], axis=1)
-        print(df.shape)
+        # print(df.shape)
         feat_df = torch.from_numpy(df.values).float()
-        print(feat_df.size())
+        # print(feat_df.size())
         feat_emb = self.read_pickle(path=os.path.join(path, "embeddings.pkl"))
-        print(feat_emb[0].shape)
+        # print(feat_emb[0].shape)
         feat_emb = np.concatenate([np.expand_dims(e, 0) for e in feat_emb], axis=0)
-        print(feat_emb.shape)
+        # print(feat_emb.shape)
         feat_emb = torch.from_numpy(feat_emb).float()
         feat = torch.cat([feat_df, feat_emb], dim=1)
-        print(feat.size())
+        # print(feat.size())
         return feat
 
     def _read_node_id(self, path: str):
