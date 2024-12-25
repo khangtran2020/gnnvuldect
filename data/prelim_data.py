@@ -30,7 +30,8 @@ class PrelimData(Data):
     def __getitem__(self, idx):
         graph_name = self.df.iloc[idx]["graph"]
         mask = self.df.iloc[idx]["mask"]
-        print(type(mask))
+        # print(type(mask))
+        mask = eval(mask)
         label = self.df.iloc[idx]["label"]
         graph_dict = self.read_graphs(path=os.path.join("Dataset", graph_name))
         return graph_dict, mask, label
