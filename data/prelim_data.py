@@ -70,6 +70,7 @@ class PrelimData(Data):
         feat_emb = self.read_pickle(path=os.path.join(path, "embeddings.pkl"))
         print(feat_emb[0].shape)
         feat_emb = np.concatenate([np.expand_dims(e, 0) for e in feat_emb], axis=0)
+        print(feat_emb[0].shape)
         feat_emb = torch.from_numpy(feat_emb).float()
         feat = torch.cat([feat_df, feat_emb], dim=1)
         return feat
