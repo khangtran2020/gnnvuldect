@@ -61,7 +61,7 @@ class PrelimData(Data):
         graph_id = self.df["graph"].unique()
         for idx, graph in enumerate(graph_id):
             graph_dict = self.read_graphs(path=os.path.join("Dataset", graph))
-            all_graphs[idx] = graph_dict
+            all_graphs[graph] = graph_dict
         self.all_graphs = all_graphs
 
     def _read_edge_list(self, path: str, etype: str):
