@@ -73,6 +73,7 @@ class PrelimData(Data):
         print(feat_emb.shape)
         feat_emb = torch.from_numpy(feat_emb).float()
         feat = torch.cat([feat_df, feat_emb], dim=1)
+        print(feat.size())
         return feat
 
     def _read_node_id(self, path: str):
