@@ -31,9 +31,9 @@ class PrelimData(Data):
         graph_name = self.df.iloc[idx]["graph"]
         mask = self.df.iloc[idx]["mask"]
         # print(type(mask))
-        mask = eval(mask)
+        mask = torch.Tensor(eval(mask))
         label = self.df.iloc[idx]["label"]
-        graph_dict = self.read_graphs(path=os.path.join("Dataset", graph_name))
+        graph_dict = self.all_graphs[graph_name]
         return graph_dict, mask, label
 
     def __len__(self):

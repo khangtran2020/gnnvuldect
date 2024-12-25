@@ -1,3 +1,4 @@
+from torch import Tensor
 from data.core import Data
 from data.prelim_data import PrelimData
 
