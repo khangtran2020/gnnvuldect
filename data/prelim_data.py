@@ -44,6 +44,7 @@ class PrelimData(Data):
     def read_graphs(self, path: str) -> dict:
         graph_dict = {}
         num_nodes = self._get_num_nodes_from_raw(path=path)
+        print(path, num_nodes)
         self.num_nodes = num_nodes
         feat = self._read_node_features(path=path)
         self.in_dim = feat.size(dim=1)
