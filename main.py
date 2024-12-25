@@ -64,7 +64,7 @@ def run(args, device):
                         data[key] = data[key].to(device)
                 pred = model(data, mask_bin)
                 console.log("Prediction: ", pred)
-                loss = loss_fn(pred, torch.Tensor([Y[i]]).float())
+                loss = loss_fn(pred, torch.Tensor([Y[i]]).float()).to(device)
                 console.log("Loss: ", loss)
                 break
             break
