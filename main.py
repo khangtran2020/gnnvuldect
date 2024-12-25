@@ -9,11 +9,13 @@ from models.models import MultiGAT
 def run(args):
 
     # Load Data
+
     console.log("Loading dataset: ", args.dataset)
     dataset = get_data(args.dataset)
     dataset.read_all_graphs()
-    console.log("Dataset loaded, size: ", len(dataset))
-    console.log("Taking a look at the first element: ", dataset[0])
+    if args.debug:
+        console.log("Dataset loaded, size: ", len(dataset))
+        console.log("Taking a look at the first element: ", dataset[0])
 
     # Data Loader
     loader = DataLoader(
@@ -21,10 +23,11 @@ def run(args):
     )
     console.log("Data Loader created")
     # Get the first batch
-    for batch in loader:
-        console.log("Batch size: ", len(batch))
-        console.log("Batch: ", batch)
-        break
+    if args.debug:
+        for batch in loader:
+            console.log("Batch size: ", len(batch))
+            console.log("Batch: ", batch)
+            break
 
     # Initialize Model
     model = MultiGAT(
@@ -35,9 +38,10 @@ def run(args):
         num_head=args.num_head,
         dropout=args.dropout,
     )
-    console.log("Model initialized, model: ", model)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
-    console.log("Optimizer initialized, optimizer: ", optimizer)
+    if args.debug:
+        console.log("Model initialized, model: ", model)
+        console.log("Optimizer initialized, params: ", model.parameters())
 
 
 if __name__ == "__main__":
