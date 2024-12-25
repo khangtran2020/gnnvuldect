@@ -35,6 +35,7 @@ class PrelimData(Data):
         label = self.df.iloc[idx]["label"]
         graph_dict = self.all_graphs[graph_name]
         graph_dict["name"] = graph_name
+        graph_dict["feat_size"] = self.feat_size
         return graph_dict, mask, label
 
     def __len__(self):
@@ -46,6 +47,7 @@ class PrelimData(Data):
         self.num_nodes = num_nodes
         feat = self._read_node_features(path=path)
         self.in_dim = feat.size(dim=1)
+        self.feat_size = feat.size()
         assert num_nodes == feat.shape[0]
         for etype in self.type_of_graph:
             if os.path.exists(os.path.join(path, f"{etype}.pkl")):
