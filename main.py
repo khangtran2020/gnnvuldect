@@ -1,3 +1,4 @@
+import torch
 from config import parse_args
 from data.utils import get_data, custom_collate
 from utils.console import console
@@ -35,6 +36,8 @@ def run(args):
         dropout=args.dropout,
     )
     console.log("Model initialized, model: ", model)
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+    console.log("Optimizer initialized, optimizer: ", optimizer)
 
 
 if __name__ == "__main__":
