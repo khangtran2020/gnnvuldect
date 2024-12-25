@@ -1,3 +1,4 @@
+import os
 import torch
 from config import parse_args
 from data.utils import get_data, custom_collate
@@ -56,12 +57,17 @@ def run(args):
                     dataset.num_nodes,
                     data["feat_size"],
                 )
-                mask_bin = torch.zeros(dataset.num_nodes)
-                mask_bin[mask] = 1
-                pred = model(data, mask_bin)
-                console.log("Prediction: ", pred)
-                loss = loss_fn(pred, Y[i])
-                console.log("Loss: ", loss)
+                console.log(
+                    f"Num nodes from raw: {dataset._get_num_nodes_from_raw(
+                        path=os.path.join('./Dataset', data['name'])
+                    )}"
+                )
+                # mask_bin = torch.zeros(dataset.num_nodes)
+                # mask_bin[mask] = 1
+                # pred = model(data, mask_bin)
+                # console.log("Prediction: ", pred)
+                # loss = loss_fn(pred, Y[i])
+                # console.log("Loss: ", loss)
                 break
             break
 
