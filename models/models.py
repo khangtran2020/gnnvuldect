@@ -16,7 +16,7 @@ class MultiGAT(nn.Module):
     ) -> None:
         super().__init__()
         self.classification_layer = torch.nn.Linear(
-            in_features=n_hidden, out_features=n_classes
+            in_features=n_hidden * num_head, out_features=n_classes
         )
         self.last_activation = (
             torch.nn.Softmax(dim=1) if n_classes > 1 else torch.nn.Sigmoid()
