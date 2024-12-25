@@ -65,14 +65,82 @@ class EarlyStopping:
         self.val_score = epoch_score
 
 
-def update_clean(model, optimizer, objective, batch):
-    optimizer.zero_grad()
-    input_nodes, output_nodes, mfgs = batch
-    inputs = mfgs[0].srcdata["feat"]
-    labels = mfgs[-1].dstdata["label"]
-    predictions = model(mfgs, inputs)
-    # print(f"Size of predictions: {predictions.size()}, Size of labels: {labels.size()}")
-    loss = objective(predictions, labels)
-    loss.backward()
+def update_one_batch(model, optimizer, loss_fn, batch, type_of_graph, device) -> float:
+    X, Y = batch
+    total_loss = 0
+    batch_size = len(X)
+    for i in range(len(X)):
+        data, mask = X[i]
+        mask_bin = torch.zeros(data["num_nodes"])
+        mask_bin[mask] = 1
+        mask_bin = mask_bin.view(-1, 1).to(device)
+        for key in type_of_graph:
+            if key in data.keys():
+                data[key] = data[key].to(device)
+        pred = model(data, mask_bin)
+        loss = loss_fn(pred, torch.Tensor([Y[i]]).float().to(device))
+        total_loss = loss + total_loss
+    total_loss = total_loss / batch_size
+    total_loss.backward()
     optimizer.step()
-    return labels, predictions, loss
+    return total_loss.item() * batch_size, batch_size
+
+
+def update(model, optimizer, loss_fn, loader, type_of_graph, device):
+    model.train()
+    total_loss = 0
+    num_poitns = 0
+    for batch in loader:
+        optimizer.zero_grad()
+        loss, num_pt = update_one_batch(
+            model, optimizer, loss_fn, batch, type_of_graph, device
+        )
+        total_loss = total_loss + loss
+        num_poitns = num_poitns + num_pt
+    return total_loss / num_poitns
+
+
+def evaluate_one_batch(model, batch, type_of_graph, device, loss_fn) -> tuple:
+    X, Y = batch
+    total_loss = 0
+    batch_size = len(X)
+    preds = []
+    for i in range(len(X)):
+        data, mask = X[i]
+        mask_bin = torch.zeros(data["num_nodes"])
+        mask_bin[mask] = 1
+        mask_bin = mask_bin.view(-1, 1).to(device)
+        for key in type_of_graph:
+            if key in data.keys():
+                data[key] = data[key].to(device)
+        pred = model(data, mask_bin).to("cpu").detach().numpy().tolist()
+        preds += pred
+        loss = loss_fn(pred, torch.Tensor([Y[i]]).float().to(device))
+        total_loss = loss + total_loss
+    total_loss = total_loss / batch_size
+    return total_loss.item() * batch_size, batch_size, preds, Y
+
+
+def evaluate(model, loader, type_of_graph, device, loss_fn):
+    model.eval()
+    total_loss = 0
+    num_points = 0
+    all_preds = []
+    all_labels = []
+    with torch.no_grad():
+        for batch in loader:
+            loss, num_pt, preds, labels = evaluate_one_batch(
+                model, batch, type_of_graph, device, loss_fn
+            )
+            total_loss = total_loss + loss
+            num_points = num_points + num_pt
+            all_preds = all_preds + preds
+            all_labels = all_labels + labels
+    # compute accuracy, auc, f1, precision
+    all_preds = np.array(all_preds)
+    all_labels = np.array(all_labels)
+    acc = accuracy_score(all_labels, all_preds.round())
+    auc = roc_auc_score(all_labels, all_preds)
+    f1 = f1_score(all_labels, all_preds.round())
+    precision = precision_score(all_labels, all_preds.round())
+    return total_loss / num_points, acc, auc, f1, precision

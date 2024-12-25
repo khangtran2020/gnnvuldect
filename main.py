@@ -5,6 +5,7 @@ from data.utils import get_data, custom_collate
 from utils.console import console
 from torch.utils.data import DataLoader
 from models.models import MultiGAT
+from models.train_eval import update, evaluate
 
 
 def run(args, device):
@@ -50,24 +51,15 @@ def run(args, device):
         console.log("Model initialized, model: ", model)
         console.log("Optimizer initialized, params: ", model.parameters())
 
-    # if debug, test forward pass
-    if args.debug:
-        for batch in loader:
-            X, Y = batch
-            for i in range(len(X)):
-                data, mask = X[i]
-                mask_bin = torch.zeros(data["num_nodes"])
-                mask_bin[mask] = 1
-                mask_bin = mask_bin.view(-1, 1).to(device)
-                for key in dataset.type_of_graph:
-                    if key in data.keys():
-                        data[key] = data[key].to(device)
-                pred = model(data, mask_bin)
-                console.log("Prediction: ", pred)
-                loss = loss_fn(pred, torch.Tensor([Y[i]]).float().to(device))
-                console.log("Loss: ", loss)
-                break
-            break
+    # Train Model
+    for epoch in range(args.epochs):
+        _ = update(model, optimizer, loss_fn, loader, dataset.type_of_graph, device)
+        loss, acc, auc, f1, precision = evaluate(
+            model, loader, dataset.type_of_graph, device, loss_fn
+        )
+        console.log(
+            f"Epoch: {epoch}, Loss: {loss}, Acc: {acc}, AUC: {auc}, F1: {f1}, Precision: {precision}"
+        )
 
 
 if __name__ == "__main__":
