@@ -39,9 +39,23 @@ def run(args):
         dropout=args.dropout,
     )
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+    loss_fn = torch.nn.BCELoss()
     if args.debug:
         console.log("Model initialized, model: ", model)
         console.log("Optimizer initialized, params: ", model.parameters())
+
+    # if debug, test forward pass
+    if args.debug:
+        for batch in loader:
+            X, Y = batch
+            for i in range(len(X)):
+                data, mask = X[i]
+                pred = model(data, mask)
+                console.log("Prediction: ", pred)
+                loss = loss_fn(pred, Y[i])
+                console.log("Loss: ", loss)
+                break
+            break
 
 
 if __name__ == "__main__":
