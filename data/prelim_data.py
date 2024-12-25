@@ -35,7 +35,6 @@ class PrelimData(Data):
         label = self.df.iloc[idx]["label"]
         graph_dict = self.all_graphs[graph_name]
         graph_dict["name"] = graph_name
-        graph_dict["feat_size"] = self.feat_size
         return graph_dict, mask, label
 
     def __len__(self):
@@ -45,10 +44,10 @@ class PrelimData(Data):
         graph_dict = {}
         num_nodes = self._get_num_nodes_from_raw(path=path)
         # print(path, num_nodes)
-        self.num_nodes = num_nodes
+        # self.num_nodes = num_nodes
         feat = self._read_node_features(path=path)
         self.in_dim = feat.size(dim=1)
-        self.feat_size = feat.size()
+        # self.feat_size = feat.size()
         print(path, num_nodes, feat.size())
         assert num_nodes == feat.shape[0]
         for etype in self.type_of_graph:
@@ -57,6 +56,8 @@ class PrelimData(Data):
                 graph = dgl.graph((u, v), num_nodes=num_nodes)
                 graph.ndata["feat"] = feat
                 graph_dict[etype] = graph
+        graph_dict["num_nodes"] = num_nodes
+        graph_dict["feat_size"] = feat.size()
         return graph_dict
 
     def read_pickle(self, path: str):
