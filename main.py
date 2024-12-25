@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from models.models import MultiGAT
 
 
-def run(args):
+def run(args, device):
 
     # Load Data
 
@@ -41,6 +41,11 @@ def run(args):
     )
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     loss_fn = torch.nn.BCELoss()
+
+    model = model.to(device)
+    loss_fn = loss_fn.to(device)
+    optimizer = optimizer.to(device)
+
     if args.debug:
         console.log("Model initialized, model: ", model)
         console.log("Optimizer initialized, params: ", model.parameters())
@@ -63,5 +68,6 @@ def run(args):
 
 
 if __name__ == "__main__":
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     args = parse_args()
-    run(args)
+    run(args, device)
