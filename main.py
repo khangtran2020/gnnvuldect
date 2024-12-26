@@ -1,6 +1,7 @@
 import os
 import wandb
 import torch
+import datetime
 import numpy as np
 from config import parse_args
 from data.utils import get_data, custom_collate
@@ -12,7 +13,8 @@ from models.train_eval import update, evaluate, EarlyStopping
 
 
 def run(args, device):
-    name = get_name(args)
+    current_time = datetime.datetime.now()
+    name = get_name(args, current_time)
     model_name = "{}.pt".format(name)
 
     run = wandb.init(
