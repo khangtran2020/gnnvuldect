@@ -90,6 +90,7 @@ def update(model, optimizer, loss_fn, loader, type_of_graph, device):
     model.train()
     total_loss = 0
     num_poitns = 0
+    print("Num batches: ", len(loader))
     for i, batch in enumerate(loader):
         optimizer.zero_grad()
         loss, num_pt = update_one_batch(
