@@ -42,7 +42,7 @@ def run(args, device):
         console.log("Taking a look at the first element: ", dataset[0])
 
     idx = np.arange(len(dataset))
-    np.random.shuffle(idx, random_state=args.seed)
+    np.random.shuffle(idx)
     tr_idx = idx[: int(0.8 * len(dataset))]
     te_idx = idx[int(0.8 * len(dataset)) :]
     tr_data = dataset.sub_data(tr_idx)
