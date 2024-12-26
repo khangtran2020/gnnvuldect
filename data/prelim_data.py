@@ -5,6 +5,7 @@ import torch
 import pickle
 import numpy as np
 import pandas as pd
+from copy import deepcopy
 from data.core import Data
 
 
@@ -39,6 +40,11 @@ class PrelimData(Data):
 
     def __len__(self):
         return self.df.shape[0]
+
+    def sub_data(self, idx):
+        copy_data = deepcopy(self)
+        copy_data.df = copy_data.df[idx].copy().reset_index(drop=True)
+        return copy_data
 
     def read_graphs(self, path: str) -> dict:
         graph_dict = {}
