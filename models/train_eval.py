@@ -90,13 +90,13 @@ def update(model, optimizer, loss_fn, loader, type_of_graph, device):
     model.train()
     total_loss = 0
     num_poitns = 0
-    print("Training started")
+    # print("Training started")
     for i, batch in enumerate(loader):
         optimizer.zero_grad()
         loss, num_pt = update_one_batch(
             model, optimizer, loss_fn, batch, type_of_graph, device
         )
-        print(f"Batch {i} Loss: {loss}")
+        # print(f"Batch {i} Loss: {loss}")
         total_loss = total_loss + loss
         num_poitns = num_poitns + num_pt
     return total_loss / num_poitns
@@ -115,9 +115,9 @@ def evaluate_one_batch(model, batch, type_of_graph, device, loss_fn) -> tuple:
         for key in type_of_graph:
             if key in data.keys():
                 data[key] = data[key].to(device)
-        pred = model(data, mask_bin).to("cpu").detach().numpy().tolist()
-        preds += pred
+        pred = model(data, mask_bin)
         loss = loss_fn(pred, torch.Tensor([Y[i]]).float().to(device))
+        preds += pred.to("cpu").detach().numpy().tolist()
         total_loss = loss + total_loss
     total_loss = total_loss / batch_size
     return total_loss.item() * batch_size, batch_size, preds, Y
@@ -129,7 +129,7 @@ def evaluate(model, loader, type_of_graph, device, loss_fn):
     num_points = 0
     all_preds = []
     all_labels = []
-    print("Evaluation started")
+    # print("Evaluation started")
     with torch.no_grad():
         for batch in loader:
             loss, num_pt, preds, labels = evaluate_one_batch(
