@@ -48,7 +48,7 @@ class PrelimData(Data):
         feat = self._read_node_features(path=path)
         self.in_dim = feat.size(dim=1)
         # self.feat_size = feat.size()
-        print(path, num_nodes, feat.size())
+        # print(path, num_nodes, feat.size())
         assert num_nodes == feat.shape[0]
         for etype in self.type_of_graph:
             if os.path.exists(os.path.join(path, f"{etype}.pkl")):
