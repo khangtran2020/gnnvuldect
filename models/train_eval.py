@@ -90,7 +90,7 @@ def update(model, optimizer, loss_fn, loader, type_of_graph, device):
     model.train()
     total_loss = 0
     num_poitns = 0
-    # print()
+    print("Training started")
     for i, batch in enumerate(loader):
         optimizer.zero_grad()
         loss, num_pt = update_one_batch(
@@ -129,6 +129,7 @@ def evaluate(model, loader, type_of_graph, device, loss_fn):
     num_points = 0
     all_preds = []
     all_labels = []
+    print("Evaluation started")
     with torch.no_grad():
         for batch in loader:
             loss, num_pt, preds, labels = evaluate_one_batch(
