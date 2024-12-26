@@ -43,7 +43,7 @@ class PrelimData(Data):
 
     def sub_data(self, idx):
         copy_data = deepcopy(self)
-        copy_data.df = copy_data.df[idx].copy().reset_index(drop=True)
+        copy_data.df = copy_data.df.iloc[idx].copy().reset_index(drop=True)
         return copy_data
 
     def read_graphs(self, path: str) -> dict:
