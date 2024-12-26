@@ -124,7 +124,7 @@ def run(args, device):
 
         es(
             epoch=epoch,
-            epoch_score=acc.item(),
+            epoch_score=acc,
             model=model,
             model_path=args.save_path + model_name,
         )
