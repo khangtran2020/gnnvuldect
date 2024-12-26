@@ -90,11 +90,12 @@ def update(model, optimizer, loss_fn, loader, type_of_graph, device):
     model.train()
     total_loss = 0
     num_poitns = 0
-    for batch in loader:
+    for i, batch in enumerate(loader):
         optimizer.zero_grad()
         loss, num_pt = update_one_batch(
             model, optimizer, loss_fn, batch, type_of_graph, device
         )
+        print(f"Batch {i} Loss: {loss}")
         total_loss = total_loss + loss
         num_poitns = num_poitns + num_pt
     return total_loss / num_poitns
