@@ -11,9 +11,11 @@ from data.core import Data
 
 class PrelimData(Data):
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, mode: str) -> None:
         super().__init__(name=name)
-        self.data_path = "Dataset/data.csv"
+        self.mode = mode
+        self.name = name
+        self.data_path = f"Dataset/{name}/{mode}/data.csv"
         self.type_of_graph = [
             "ARGUMENT",
             "RECEIVER",
@@ -33,7 +35,10 @@ class PrelimData(Data):
         mask = self.df.iloc[idx]["mask"]
         # print(graph_name)
         mask = torch.Tensor(eval(mask)).long()
-        label = self.df.iloc[idx]["label"]
+        if self.mode == "train":
+            label = self.df.iloc[idx]["label"]
+        else:
+            label = -1
         graph_dict = self.all_graphs[graph_name]
         graph_dict["name"] = graph_name
         return graph_dict, mask, label
@@ -74,7 +79,9 @@ class PrelimData(Data):
         all_graphs = {}
         graph_id = self.df["graph"].unique()
         for idx, graph in enumerate(graph_id):
-            graph_dict = self.read_graphs(path=os.path.join("Dataset", graph))
+            graph_dict = self.read_graphs(
+                path=os.path.join("Dataset", self.name, self.mode, graph)
+            )
             all_graphs[graph] = graph_dict
         self.all_graphs = all_graphs
 

@@ -148,3 +148,23 @@ def evaluate(model, loader, type_of_graph, device, loss_fn):
     f1 = f1_score(all_labels, all_preds.round())
     precision = precision_score(all_labels, all_preds.round())
     return total_loss / num_points, acc, auc, f1, precision
+
+
+def predict(model, loader, type_of_graph, device):
+    model.eval()
+    all_preds = []
+    print("Prediction started")
+    with torch.no_grad():
+        for i, batch in enumerate(loader):
+            X, _ = batch
+            for i in range(len(X)):
+                data, mask = X[i]
+                mask_bin = torch.zeros(data["num_nodes"])
+                mask_bin[mask] = 1
+                mask_bin = mask_bin.view(-1, 1).to(device)
+                for key in type_of_graph:
+                    if key in data.keys():
+                        data[key] = data[key].to(device)
+                pred = model(data, mask_bin)
+                all_preds += pred.to("cpu").detach().numpy().tolist()
+    return all_preds

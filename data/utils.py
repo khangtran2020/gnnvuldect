@@ -3,10 +3,10 @@ from data.core import Data
 from data.prelim_data import PrelimData
 
 
-def get_data(data: str) -> Data:
+def get_data(data: str, mode: str) -> Data:
 
     if data == "prelim":
-        return PrelimData(name=data)
+        return PrelimData(name=data, mode=mode)
 
 
 def custom_collate(original_batch):

@@ -19,7 +19,7 @@ def add_general_group(group):
     )
     group.add_argument("--seed", type=int, default=2605, help="seed value")
     group.add_argument(
-        "--mode", type=str, default="clean", help="Mode of running ['clean', 'dp']"
+        "--mode", type=str, default="clean", help="Mode of running [train, test]"
     )
     group.add_argument("--device", type=str, default="cpu", help="")
     group.add_argument("--num_worker", type=int, default=0, help="")
@@ -40,7 +40,7 @@ def add_data_group(group):
 
 
 def add_model_group(group):
-    group.add_argument("--model_type", type=str, default="sage", help="Model type")
+    group.add_argument("--model_load", type=str, default="", help="Checkpoint file")
     group.add_argument("--lr", type=float, default=0.001, help="learning rate")
     group.add_argument(
         "--batch_size", type=int, default=512, help="batch size for training process"
