@@ -13,8 +13,10 @@ from models.train_eval import update, evaluate, EarlyStopping, predict
 
 
 def run(args, device):
+
     if args.mode == "test":
         args.debug = 0
+
     current_time = datetime.datetime.now()
     name = get_name(args, current_time)
     model_name = "{}.pt".format(name)
